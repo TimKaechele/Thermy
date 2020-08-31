@@ -1,24 +1,47 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Manage all your thermostat readings
 
-Things you may want to cover:
+## Dependencies
 
-* Ruby version
+- Ruby Version (MRI) 2.7.1
+- Postgresql 12.3
+- Redis 6.0.5
 
-* System dependencies
+## Setup
 
-* Configuration
+Install the correct ruby version
 
-* Database creation
+```shell
+$ rvm install 2.7.1
+```
 
-* Database initialization
+Install the ruby dependencies
 
-* How to run the test suite
+```shell
+$ bundle install --jobs=64
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Create your database file and fill in your username/password
 
-* Deployment instructions
+```shell
+$ cp config/database.yml.example config/database.yml
+```
 
-* ...
+Setup the database
+
+```shell
+$ bundle exec rails db:setup
+```
+
+Run the test suite
+
+```shell
+$ bundle exec rspec
+```
+
+Start a server
+
+```shell
+$ bundle exec rails server
+```
