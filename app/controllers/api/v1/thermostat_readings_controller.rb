@@ -2,6 +2,10 @@ module Api
   module V1
     class ThermostatReadingsController < ApplicationController
       def show
+        thermostat_reading = ThermostatReading.where(thermostat: current_thermostat)
+                                              .find_by!(sequence_number: params[:id])
+
+        render(json: thermostat_reading)
       end
 
       def create
