@@ -1,0 +1,166 @@
+openapi: 3.0.1
+
+info:
+  title: Thermy Api Documentation
+  description: Api to store thermostat readings
+  version: 1.0.0
+
+servers:
+  - url: https://example.com/
+
+security:
+  - HouseholdTokenAuth: []
+
+paths:
+  /api/v1/thermostat_readings/{id}:
+    get:
+      tags:
+        - ThermostatReading
+      operationId: GetThermostatReading
+      summary: Get a Thermostat Reading
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+            example: '39'
+          required: true
+      responses:
+        '200':
+          description: 'The thermostat reading'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThermostatReading'
+        '404':
+          description: 'Entry could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/thermostat_readings/:
+    post:
+      tags:
+        - ThermostatReading
+      operationId: CreateThermostatReading
+      summary: Create a ThermostatReading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                battery_charge:
+                  type: number
+                  description: The battery charge in percent (between 0 and 100)
+                  minimum: 0
+                  maximum: 100
+                temperature:
+                  type: number
+                  description: The temperature of the thermostat at the measurement time
+                humidity:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                  description: The relative humidity
+      responses:
+        '201':
+          description: 'The thermostat reading was created successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThermostatReading'
+        '400':
+          description: 'Invalid thermostat reading'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/thermostat_readings/statistics/:
+    get:
+      tags:
+        - ThermostatReadingStatistics
+      operationId: ThermostatReadingStatistics
+      summary: Get the statistics for the authenticated thermostat
+      responses:
+        '200':
+          description: The statistics for the authenticated thermostat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThermostatReadingStatistics'
+        '404':
+          description: 'No statistics available'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    HouseholdTokenAuth:
+      type: apiKey
+      in: header
+      name: X-Household-Token
+  schemas:
+    Error:
+      type: object
+      properties:
+        errors:
+          type: object
+          example: {
+            humidity: ["can't be blank"]
+          }
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              description: The error message
+              example: "can't be blank"
+
+    ThermostatReading:
+      type: object
+      properties:
+        sequence_number:
+          type: integer
+          description: The unique id for the thermostat reading
+          example: 49
+        battery_charge:
+          type: number
+          description: The battery charge in percent (between 0 and 100)
+          minimum: 0
+          maximum: 100
+        temperature:
+          type: number
+          description: The temperature of the thermostat at the measurement time in Celsius
+        humidity:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: The relative humidity
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2020-09-01T14:07:11.920Z'
+    ThermostatReadingStatistics:
+      type: object
+      properties:
+        min_temperature:
+          type: number
+        max_temperature:
+          type: number
+        avg_temperature:
+          type: number
+        min_humidity:
+          type: number
+        max_humidity:
+          type: number
+        avg_humidity:
+          type: number
+        min_battery_charge:
+          type: number
+        max_battery_charge:
+          type: number
+        avg_battery_charge:
+          type: number
+
