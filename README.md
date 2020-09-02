@@ -122,4 +122,3 @@ batching of readings in one request even more throughput could be achieved.
 
 By adding jittering to the client later on an DDoS scenario could be prevented
 where all thermostats call the endpoint at exactly the same time.
-at exactly the same time)
