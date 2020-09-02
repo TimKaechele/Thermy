@@ -38,6 +38,9 @@ group :development, :test do
 
   # Add faker for test data
   gem 'faker'
+
+  # Code coverage reports
+  gem 'simplecov', require: false
 end
 
 group :development do
