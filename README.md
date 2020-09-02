@@ -46,6 +46,12 @@ Start a server
 $ bundle exec rails server
 ```
 
+Generate some thermostats for your application
+
+```shell
+$ bundle exec rails r 'ThermostatDemoDataSeeder.new.call'
+```
+
 ## Docs
 
 You can find the api documentation under public/api_docs.yml.
