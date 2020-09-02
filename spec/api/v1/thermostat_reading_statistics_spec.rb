@@ -10,6 +10,8 @@ RSpec.describe '/api/v1/thermostat_readings/statistics', type: :request do
   end
 
   describe 'GET /api/v1/thermostat_reading/statistics' do
+    it_behaves_like 'an authenticated request', :get
+
     context 'no readings present' do
       it 'returns a 404' do
         assert thermostat.thermostat_readings.length.zero?

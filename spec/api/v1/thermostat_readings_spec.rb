@@ -11,6 +11,8 @@ RSpec.describe '/api/v1/thermostat_readings', type: :request do
   describe 'POST /api/v1/thermostat_readings' do
     let!(:url) { '/api/v1/thermostat_readings' }
 
+    it_behaves_like 'an authenticated request', :post
+
     context 'valid parameters' do
       let!(:payload) {
         attributes_for(:thermostat_reading).slice(:temperature,
@@ -64,6 +66,8 @@ RSpec.describe '/api/v1/thermostat_readings', type: :request do
 
   describe 'GET /api/v1/thermostat_readings/:id' do
     let!(:thermostat_reading) { create(:thermostat_reading, thermostat: thermostat) }
+    let!(:url) { "/api/v1/thermostat_readings/123" }
+    it_behaves_like 'an authenticated request', :get
 
     context 'existent reading' do
       it 'returns the requested reading' do
