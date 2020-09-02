@@ -3,13 +3,12 @@ class ThermostatReadingWriteWorker
   class KeyNotFoundError < StandardError; end;
 
   def perform(key)
-    thermostat_reading_data = get_thermostat_data(key)
-    ThermostatReading.create!(thermostat_reading_data)
+    ThermostatReading.create!(thermostat_reading_data(key))
   end
 
   private
 
-  def get_thermostat_data(key)
+  def thermostat_reading_data(key)
     thermostat_reading_json = nil
     $REDIS_CONNECTION_POOL.with do |connection|
       thermostat_reading_json = connection.get(key)
