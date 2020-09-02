@@ -31,5 +31,7 @@ class ThermostatReading < ApplicationRecord
     self.where(thermostat: thermostat)
         .select(aggregate_sql_query)
         .group('thermostat_readings.thermostat_id')[0]
+        &.attributes
+        &.except('id')
   end
 end
