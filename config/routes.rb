@@ -6,7 +6,6 @@ Rails.application.routes.draw do
           get '/statistics', to: 'thermostat_reading_statistics#show'
         end
       end
-
     end
   end
 end
