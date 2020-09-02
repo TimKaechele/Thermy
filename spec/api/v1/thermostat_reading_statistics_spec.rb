@@ -14,10 +14,7 @@ RSpec.describe '/api/v1/thermostat_readings/statistics', type: :request do
 
     context 'no readings present' do
       it 'returns a 404' do
-        assert thermostat.thermostat_readings.length.zero?
-
-        get url,
-            headers: auth_headers
+        get url, headers: auth_headers
 
         expect(response.status).to eq(404)
         expect(json['errors']).to be_present
@@ -26,22 +23,25 @@ RSpec.describe '/api/v1/thermostat_readings/statistics', type: :request do
     end
 
     context 'readings present' do
+      let!(:thermostat_reading_statistics_repository) { ThermostatReadingStatisticsRepository.new }
       it 'returns the calculated statistics' do
-        create(:thermostat_reading, temperature: 5.0,
-                                    humidity: 15.0,
-                                    battery_charge: 30.0,
-                                    thermostat: thermostat)
-        create(:thermostat_reading, temperature: 7.0,
-                                    humidity: 17.0,
-                                    battery_charge: 32.0,
-                                    thermostat: thermostat)
-        create(:thermostat_reading, temperature: 10.0,
-                                    humidity: 20.0,
-                                    battery_charge: 35.0,
-                                    thermostat: thermostat)
+        thermostat_reading_statistics_repository.add(build(:thermostat_reading,
+                                                           temperature: 5.0,
+                                                           humidity: 15.0,
+                                                           battery_charge: 30.0,
+                                                           thermostat: thermostat))
+        thermostat_reading_statistics_repository.add(build(:thermostat_reading,
+                                                           temperature: 7.0,
+                                                           humidity: 17.0,
+                                                           battery_charge: 32.0,
+                                                           thermostat: thermostat))
+        thermostat_reading_statistics_repository.add(build(:thermostat_reading,
+                                                           temperature: 10.0,
+                                                           humidity: 20.0,
+                                                           battery_charge: 35.0,
+                                                           thermostat: thermostat))
 
-        get url,
-            headers: auth_headers
+        get url, headers: auth_headers
 
         expect(response.status).to eq(200)
 

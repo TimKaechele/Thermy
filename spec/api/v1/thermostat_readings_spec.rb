@@ -19,17 +19,6 @@ RSpec.describe '/api/v1/thermostat_readings', type: :request do
                                                   :humidity,
                                                   :battery_charge)
       }
-      it 'saves the record with the given attributes' do
-        expect do
-          post url, params: payload, headers: auth_headers
-        end.to change { ThermostatReading.count }.by(1)
-
-        latest_entry = ThermostatReading.order(created_at: :desc).first
-
-        expect(latest_entry.temperature).to eq(payload[:temperature])
-        expect(latest_entry.humidity).to eq(payload[:humidity])
-        expect(latest_entry.battery_charge).to eq(payload[:battery_charge])
-      end
 
       it 'returns a sequence number in the payload' do
         post url, params: payload, headers: auth_headers
@@ -65,12 +54,14 @@ RSpec.describe '/api/v1/thermostat_readings', type: :request do
   end
 
   describe 'GET /api/v1/thermostat_readings/:id' do
-    let!(:thermostat_reading) { create(:thermostat_reading, thermostat: thermostat) }
+    let!(:thermostat_reading) { build(:thermostat_reading, thermostat: thermostat) }
     let!(:url) { "/api/v1/thermostat_readings/123" }
     it_behaves_like 'an authenticated request', :get
 
     context 'existent reading' do
       it 'returns the requested reading' do
+        ThermostatReadingRepository.new.save(thermostat_reading)
+
         get "/api/v1/thermostat_readings/#{thermostat_reading.sequence_number}",
             headers: auth_headers
 
