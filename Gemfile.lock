@@ -185,12 +185,14 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
+  connection_pool
   factory_bot_rails
   faker
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.2)
+  redis
   rspec-rails
   sidekiq
   simplecov
